@@ -8,8 +8,10 @@ inductive pdl_type
 
 open pdl_type
 
+attribute [reducible]
 def PropVar := nat
 
+attribute [reducible]
 def ProgVar := nat
 
 inductive pdl : pdl_type → Type
@@ -75,6 +77,19 @@ structure kripke :=
 -- (world : Type)
 -- (prop_eval : world → PropVar → bool)
 -- (prog_eval : ProgVar → world → world → bool)
+
+section
+-- This says only propositions 0,1,2,3 are true in every world.
+private def f (w : ℕ) (p : PropVar) : Prop := if p > 4 then false else true
+-- This says worlds 0,1,2,3 are fully connected via atomic program 2. No other
+-- worlds are connected together.
+private def g (a : ProgVar) (w₁ w₂: ℕ) : Prop := 
+if a = 2 ∧ w₁ ≤ 3 ∧ w₂ ≤ 3 then true else false
+-- Now we have a kripke structure where worlds 0,1,2,3 are are fully connected 
+-- via atomic program 2, and propostions 0,1,2,3 are true in these worlds. 
+private def my_model : kripke := kripke.mk f g 
+
+end 
 
 section ith
 
