@@ -165,3 +165,11 @@ end PDL
 
 -- print pdlfml
 -- print pdlfml._mut_
+
+-- def fake (n : ℕ) : Prop := if n < 4 then true else false
+
+-- check @if_pos
+
+-- theorem thm : fake 0 := trivial
+
+-- example : true := by trivial
