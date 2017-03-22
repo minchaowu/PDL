@@ -19,7 +19,7 @@ inductive pdl : pdl_type → Type
 | Neg (φ : pdl Fml)                 : pdl Fml
 | And (φ : pdl Fml) (ψ : pdl Fml)   : pdl Fml
 | Or  (φ : pdl Fml) (ψ : pdl Fml)   : pdl Fml
-| EF (a : pdl Prg) (φ : pdl Fml)    : pdl Fml
+| EX (a : pdl Prg) (φ : pdl Fml)    : pdl Fml
 | AX (a : pdl Prg) (φ : pdl Fml)    : pdl Fml
 | Atom (n : ProgVar)                : pdl Prg
 | Test (φ : pdl Fml)                : pdl Prg
@@ -33,7 +33,7 @@ notation `#`:max P:max := Var P
 notation A ∨ B         := Or A B
 notation A ∧ B         := And A B
 notation ~ A           := Neg A
-notation `⟨` a `⟩` φ      := EF a φ 
+notation `⟨` a `⟩` φ      := EX a φ 
 notation `[` a `]` φ      := AX a φ 
 notation φ `??`        := Test φ
 notation a `;` b      := Cons a b
@@ -123,7 +123,7 @@ def Satisfies (M : kripke) : ℕ → pdl Fml → Prop
 | w (~ φ)         := ¬ (Satisfies w φ)
 | w (And φ ψ)     := Satisfies w φ ∧ Satisfies w ψ
 | w (Or φ ψ)      := Satisfies w φ ∨ Satisfies w ψ
-| w (EF a φ)      := ∃ y, Acc M w y a ∧ Satisfies y φ
+| w (EX a φ)      := ∃ y, Acc M w y a ∧ Satisfies y φ
 | w (AX a φ)      := ∀ y, Acc M w y a → Satisfies y φ
 
 -- Satisfiability 
