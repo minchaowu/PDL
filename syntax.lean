@@ -27,6 +27,16 @@ inductive pdl : pdl_type → Type
 | Nd (a : pdl Prg) (b : pdl Prg)    : pdl Prg
 | Star (a : pdl Prg)                : pdl Prg 
 
+-- inductive pdl_u : pdl_type → Type
+-- | Var (n : PropVar)                              : pdl_u Fml
+-- | Neg (φ : pdl Fml)                              : pdl_u Fml
+-- | And (φ : pdl Fml) (ψ : pdl Fml)                : pdl_u Fml
+-- | Or  (φ : pdl Fml) (ψ : pdl Fml)                : pdl_u Fml
+-- | EX (a : pdl Prg) (φ : pdl Fml)                 : pdl_u Fml
+-- | EU (a : pdl Prg) (φ : pdl Fml) (ψ : pdl Fml)   : pdl_u Fml
+-- | EG (a : pdl Prg) (φ : pdl Fml)                 : pdl_u Fml
+-- | Atom (n : ProgVar)                             : pdl_u Prg
+
 open pdl
 
 notation `#`:max P:max := Var P
@@ -114,9 +124,9 @@ def Acc (M : kripke) : ℕ → ℕ → pdl Prg → Prop
 | w₁ w₂ (Nd γ δ)      := Acc w₁ w₂ γ ∨ Acc w₁ w₂ δ
 | w₁ w₂ (Star γ)      := ∃ n : ℕ, ∃ l : list ℕ, length l = n ∧ 
                          head l = w₁ ∧ head (reverse l) = w₂ ∧ 
-                         ∀i, i + 1 < length l → 
-                         Acc (ith l i begin apply lt_of_succ_lt a end) 
-                         (ith l (i+1) begin exact a end) γ
+                         ∀i, ∀ h : i + 1 < length l, 
+                         Acc (ith l i (lt_of_succ_lt h)) 
+                         (ith l (i+1) h) γ
 
 def Satisfies (M : kripke) : ℕ → pdl Fml → Prop 
 | w (# P)         := kripke.prop_eval M w P 
